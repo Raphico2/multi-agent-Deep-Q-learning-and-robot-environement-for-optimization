@@ -48,7 +48,7 @@ Our code is divided into 9 python files. 6 of the python files aims to describe 
 At each timestamp, robots are choosing an action to perform, this action appears on the dashboard at each timestamp in a grey rectangle.
 
 
-Environement.py : It is the global implementation of the environment, it coordinates the state file, the actoon file, the visual model file and the config file. It is implemented as a gym environment with the functions step, render and reset. The function step simulates a timestamp from the moment each robots get their action to perform. The environment class allow the simulator to get all the information of the current global state of the world but also the observaGon space of each robot at each timestamp and their action space and possible actions space. We can reset or start a new day from the environment class.
+- Environement.py : It is the global implementation of the environment, it coordinates the state file, the actoon file, the visual model file and the config file. It is implemented as a gym environment with the functions step, render and reset. The function step simulates a timestamp from the moment each robots get their action to perform. The environment class allow the simulator to get all the information of the current global state of the world but also the observaGon space of each robot at each timestamp and their action space and possible actions space. We can reset or start a new day from the environment class.
 
 
 - UGls.py: Contains the function for getting the possible action with the greater Q value for a given robot and the function that determine randomly arrival time of each robot.
