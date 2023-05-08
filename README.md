@@ -1,12 +1,13 @@
-# multi-agent-Deep-Q-learning-and-robot-environement-for-optimization
+multi-agent-Deep-Q-learning-and-robot-environement-for-optimization
+
 The code refer to the full integration of a restaurant environment, managed by robots using multi-agent deep Q learning model 
 
 Our project deals with robot cognition and collaboration in order to perform optmization task. The goal was to create a restaurant environment and train robots to manage and optmize the gestion of the restaurant. The restaurant is a Pizza fast food where customers enter, order, wait until be served and then pay and eat. The robots are divided into two type, waiter robots and cooker robots. They must learn how to cooperate to answer the demand as fast as possible, keep the restaurant clean and then improve the customer satsfaction in order to increase the income. The report aims to detail the environment, the robots, the AI model we used and our results.
 
 
-1. The goal and environment
+# 1. The goal and environment
 
-Environment
+# Environment
 
 The environment is a restaurant that can host 200 customers maximum a day. The restaurant is open for 4 hours which represent in our model 240 timestamp. Each day, every customer can decide to come or not, the probability of coming into the restaurant is set following a Bernoulli Law where the probability is the customer self-satisfaction. At the beginning, each customer has a probability of 0.5 to come, then, in funcGon of its last experience in the restaurant, its self-satisfaction can increase or decrease and then, influence the chances to return the next day. When a customer decides to come, its arrival timestamp is set following a normal law with a mean of 120 timmestamp and a variance of 60 timestamp.
 The environment is partially observable for the robots who manage the restaurant because they don’t know customer satisfaction, the number of customer who will come and customer arrival Gme. Each day, a scheduler is built and program at what Gme customer will arrive, this information is not accessible for robots.
@@ -16,22 +17,21 @@ Each time a customer gets served, he pays 10$, each time a cooker robot makes a 
 A simulation in our environment represents a year simulation, where the number of day and hours of activity per day can be set in the configuration of our environment. For the project, we trained our model on the basis of 4 hours opening time (240 timestamp) per days and a “year” of 50 days.
 
 
-Agents
+# Agents
 
 
 Our agents are the robots, we want to train our agent to manage the restaurant as best as possible. Every robot has a type (cooker or waiter) and pre-defined actions it can perform as we described above. It is important to notice that every action take one timestamp which represents 1 minutes. The action of cook gives as result 1 pizza created. On the other side, there is a limited number of plate that need to be washed to be reused, when the cooker robot decides to perform the action “Wash”, a defined number of plate are washed in one timestamp, this number is a parameter that can be set in the configuration. It is the same for the action “Clean” of the waiter, the amount of dirt the robot is able to clean in one timestamp can also be set in the configuration of the environment.
 Our model has been trained with 3 cooker robots and 3 waiters robots but can be change anytime
 
 
-Goal and expectation
+# Goal and expectation
 
 Our goal project is to create a model that will teach our robots to manage the restaurant. The goal of our robots is to maximize the year income of the restaurant. In order to do it, robots have to collaborate to increase as best as possible the customer satisfaction, more a customer is satisfied, more the chance of coming back the next day is high and then, more the daily income will increase. In our project we will use reinforcement learning and implement a multi-agent Deep Q learning algorithm in order to teach the robots. We expect to find the best policy for our robots to manage the restaurant and reach the maximum possible daily income. Moreover, we want our robots to maximize the customer satisfaction and keep the restaurant clean.
 
 
-2. Our code, model, and algorithm
+# 2. Our code, model, and algorithm
 
-Code
-
+# Code
 
 Our code is divided into 9 python files. 6 of the python files aims to describe the environment, agent, visual render, and funcGons such as actions, pre-conditions, and effects. 1 python file is the reinforcement learning algorithm implementation, 1 is for training our model and the last one is for showing results.
 
@@ -63,14 +63,14 @@ Environement.py : It is the global implementation of the environment, it coordin
 - TestSimulator.py: The file is the main file to see an example of a day in the model and perform a year simulation of the restaurant and see the result in term of day and year income. The file have to be used a[er the training to see if we did obtained good results in our project.
 
 
-Model and Algorithm
+# Model and Algorithm
 
 Because multi-agent reinforcement learning is a very challenging task, especially for robots, we decide to try it for our project. Our algorithm is a Deep Q learning fully decentralized. It means that each robot has its own Neural Network (in our case a fully connected neural network with 2 hidden layers) and each robot takes its own decision regarding its observation of the world. Each robot has a partial observation space of the restaurant. The goal of the model is to make the robot learn the best policy to maximize customer satisfaction. During the training procedure, the model function “predict” is called at each timestamp to give the Q-value for each action for each robot. The prediction can be random if the model is exploring the environment or can be done with the Neural Network if the model is exploiting the environment.
 At each timestamp, the actions and the observation space for each robot are memorized. At the end of the day, robots are getting the reward (customer satisfaction mean) and then the weight of the Neural network of each robot is updated with backward propagation.
 After the learning procedure, the brains of each robot are saved and then can be reused for testing the model.
 
 
-Reward and punishment
+# Reward and punishment
 
 
 In our RL model we had to define a reward and punishment policy. We wanted at the beginning to set the daily income as reward but we figured out that it was not relevant because customers can pay even if they are not satisfied. We decided to set the global satisfaction as the final reward of the day. We also added small reward during a day to encourage or discourage robots to perform or not perform actions.
@@ -78,7 +78,7 @@ For the cooker robots we applied a penalty if they choose to not do anything if 
 For the waiter robot, we give a reward each time the robot chooses to deliver or take the order of the customer who is first on the waiting list. The size of the reward increases if the robot decides to serve or take the order of someone who is on the top of the waiting list, and get close to 0 if the robot choose to serve someone who is far from the top. We also punish a waiter who is not doing anything if there are things to do and reward them when they clean the restaurant if the dirt level is high.
 
 
-Results
+# Results
 
 
 We trained our algorithm during 10000 simulated years or 325 days with 240 timestamp per day. The tradeoff between exploration and exploitation is decreasing over timestamp and reach a level of 10%-90% after the year 7000. The training time of our algorithm was very long, it took us 6 days to complete the training part. Each simulated year take approximatively 1 minutes. Afer the training part, we get the following results:
@@ -87,12 +87,12 @@ We trained our algorithm during 10000 simulated years or 325 days with 240 times
 - The daily income reach afer the year 8000 an amount between 1100$ and 1200$ (when 1200 is the maximum possible amount since there can be maximum 150 customers in the restaurant)
 - The Restaurant is almost all the time above the first level of dirt.
 - The robots succeeded to learn that they need all the time battery and go recharge themselves when there amount of bahery gets lower.
-- Afer the year 4500 robots understood that in order to maximize the customer satisfaction, all the customers must be served a[er the end of the day.
+- Afer the year 4500 robots understood that in order to maximize the customer satisfaction, all the customers must be served after the end of the day.
 - Afer the year 6350 robots understood that the best policy is to serve the customer which come first in the restaurant.
 
 The training was really satisfying for the amount of 200 customers maximum for 6 robots in the restaurant. We also saw that Robots improved their coordination, for example, 2 of the cooker robots are almost all the time cooking where 1 is almost all the time washing the plate.
 Afer training, we make a record of a day and a year of simulation with the visualization in order to show our results. Notice that we can show our results and modifying parameters directly on the code in the file simulator.py.
-We also collected the results over a year and see how many customers the restaurant arrives to maintains. With our environment algorithm, more a customer is satisfied from its last visit, more the chances to come back the next day are high. For an amount of 200 customers maximum and a satisfaction rate of 0.5 at the beginning, the robots start with a number of customer approximatively equal to 100. They get to answer the demand for all customer to increase their satisfaction to get more customers the next day, then they have to again answer the demand. We noticed that when the number of customer in the restaurant is lower than 125, the customer satisfaction lay between 0.53 and 0.65 which is better than the beginning, we also noticed that the robots arrive to answer the demand for all customer, nobody is not served a[er the end of the service.
+We also collected the results over a year and see how many customers the restaurant arrives to maintains. With our environment algorithm, more a customer is satisfied from its last visit, more the chances to come back the next day are high. For an amount of 200 customers maximum and a satisfaction rate of 0.5 at the beginning, the robots start with a number of customer approximatively equal to 100. They get to answer the demand for all customer to increase their satisfaction to get more customers the next day, then they have to again answer the demand. We noticed that when the number of customer in the restaurant is lower than 125, the customer satisfaction lay between 0.53 and 0.65 which is better than the beginning, we also noticed that the robots arrive to answer the demand for all customer, nobody is not served after the end of the service.
 When the number of customers is higher than 125, robots have difficulties to maintain the satisfaction level above 0.5 and to serve all the customers.
 
 After a year of service, the customer satisfaction lay between 0.55 and 0.6 and the average number of customer a day is 123. Moreover, the daily income of the restaurant is 915$ of profits which is a very good results.
@@ -102,7 +102,7 @@ https://youtu.be/e6wnH9OFvDk
 Anyone can also run the code in the file simulator.py and see the results directly
 
 
-Limits and improvement
+# Limits and improvement
 
 
 The results showed us that using reinforcement Learning for the gestion of a restaurant by robots can help improve results in the domain. Our results showed that this type of algorithm works and give to robots an intelligence that could help resolving complex tasks. However, we met some issues such as the fact that robots did not get to predict the probability law of customers arrival (normal law with mean 120 and variance 60). They don’t really act in function of their arrival but in function of which customer is here. Another issue is that robots seem to take order and deliver randomly to customer and not by their arrival time.
